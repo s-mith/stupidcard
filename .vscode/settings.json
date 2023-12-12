@@ -1,0 +1,24 @@
+{
+    "python.analysis.extraPaths": [
+        "./cards",
+        "./cards/subcards",
+        "./zones",
+        "./zones/subzones",
+        "./zones/subzones/subcards",
+        "./zones/subzones/subeffects",
+        "./zones/subzones/subevents",
+        "./events",
+        "./events/subevents",
+        "./events/subevents/subHP",
+        "./events/subevents/subHP/subCreature",
+        "./events/subevents/subHP/subPermanence",
+        "./events/subevents/subHP/subSpell",
+        "./events/subevents/subZone",
+        "./players",
+        "./effects",
+        "./effects/subeffects",
+        "./permanences",
+        "./states",
+        "./gamemasters",
+    ]
+}
