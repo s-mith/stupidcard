@@ -1,8 +1,10 @@
+import sys
 from player import Player
 from card import Card
 from eventZonePlayer import EventZonePlayer
 from state import State
 from effect import Effect
+from eventGameStart import EventGameStart
 
 class GameMaster:
     def __init__(self, player1: Player, player2: Player):
@@ -31,6 +33,24 @@ class GameMaster:
     
     def run_all_effects(self, event):
         self.state.run_all_effects(event)
+    
+    def mainLoop(self):
+        # Game start
+        EventGameStart("EventGameStart", self, [self.state.player1, self.state.player2])
+        while True:
+            # check for events
+            event = self.state.get_top_event()
+            print(event.id)
+            input("{self.state.player1.id} press enter")
+            input("{self.state.player1.id} press enter")
+            event.execute()
+            print("{self.state.player1.id} hand: ", [i.id for i in self.state.player1.hand.cards])
+            print("{self.state.player2.id} hand: ", [i.id for i in self.state.player2.hand.cards])
+        
+
+
+        
+    
         
         
                     
