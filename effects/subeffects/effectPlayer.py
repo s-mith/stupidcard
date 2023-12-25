@@ -1,7 +1,4 @@
-from effect import Effect
-from player import Player
-
 class EffectPlayer(Effect):
-    def __init__(self,id ,  effect: Effect, player: Player):
-        super().__init__(id, effect)
+    def __init__(self,id ,  event, func, funcif, player):
+        super().__init__(id, event, func,funcif)
         self.player = player

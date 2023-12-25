@@ -1,10 +1,5 @@
-from event import Event
-from player import Player
-from gameMaster import GameMaster
-
-
 class EventMP(Event):
-    def __init__(self, id, gamemaster: GameMaster, old_mp: int, new_mp: int, target_player: Player):
+    def __init__(self, id, gamemaster, old_mp, new_mp, target_player):
         super().__init__(id, gamemaster)
         self.old_mp = old_mp
         self.new_mp = new_mp

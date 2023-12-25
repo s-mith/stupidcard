@@ -17,16 +17,12 @@ class EventZone(Event):
         self.new_zone_owner = new_zone_owner
     def execute(self):
         self.new_zone.add_card(self.old_zone.remove_card(self.moving_card))
+
 class EventZonePlayer(EventZone):
     def __init__(self, id, gamemaster, moving_card, old_zone, new_zone, old_zone_owner, new_zone_owner, effect_player):
         super().__init__(id, gamemaster, moving_card, old_zone, new_zone, old_zone_owner, new_zone_owner)
         self.owner = effect_player
-class EventZoneCard(EventZone):
-    def __init__(self, id, gamemaster, moving_card, old_zone, new_zone, old_zone_owner, new_zone_owner, effect_card, effect_card_owner):
-        super().__init__(id, gamemaster,  moving_card, old_zone, new_zone, old_zone_owner, new_zone_owner)
-        self.effect_card_owner = effect_card_owner
-        self.effect_card = effect_card
-        self.owner = effect_card_owner
+
 class EventZonesCard(EventZone):
     def __init__(self, id, gamemaster, moving_card, old_zone, new_zone, old_zone_owner, new_zone_owner, effect_card, effect_card_owner):
         super().__init__(id, gamemaster, moving_card, old_zone, new_zone, old_zone_owner, new_zone_owner)
@@ -35,6 +31,16 @@ class EventZonesCard(EventZone):
     def execute(self):
         for card in self.moving_card:
             self.new_zone.add_card(self.old_zone.remove_card(card))
+
+class EventZonesCard(EventZone):
+    def __init__(self, id, gamemaster, moving_card, old_zone, new_zone, old_zone_owner, new_zone_owner, effect_card, effect_card_owner):
+        super().__init__(id, gamemaster, moving_card, old_zone, new_zone, old_zone_owner, new_zone_owner)
+        self.effect_card_owner = effect_card_owner
+        self.effect_card = effect_card
+    def execute(self):
+        for card in self.moving_card:
+            self.new_zone.add_card(self.old_zone.remove_card(card))
+
 class EventZonesPlayer(EventZone):
     def __init__(self, id, gamemaster, moving_card, old_zone, new_zone, old_zone_owner, new_zone_owner, effect_player):
         super().__init__(id, gamemaster, None, old_zone, new_zone, old_zone_owner, new_zone_owner)
@@ -66,6 +72,9 @@ class EventZonesDoubleCard():
             self.new_zone1.add_card(self.old_zone1.remove_card(card))
         for card in self.moving_cards2:
             self.new_zone2.add_card(self.old_zone2.remove_card(card))
+# from events\event.py import Event
+# from events\subevents\subZone\EventZonesDoubleCard import EventZonesDoubleCard
+# imports
 class EventGameStart(Event):
     def __init__(self, id, gamemaster, players):
         super().__init__(id, gamemaster)
@@ -73,6 +82,7 @@ class EventGameStart(Event):
     def execute(self):
         self.gamemaster.state.set_player(self.players[1])
         EventZonesDoubleCard("EventZonesDoubleCard", self.gamemaster, [self.players[0].deck.get_n_top(i) for i in range(5)], [self.players[1].deck.get_n_top(i) for i in range(5)], self.players[0].deck, self.players[0].hand, self.players[1].deck, self.players[1].hand, self.players[0], self.players[0], self.players[1], self.players[1])
+
 class EventMP(Event):
     def __init__(self, id, gamemaster, old_mp, new_mp, target_player):
         super().__init__(id, gamemaster)
@@ -153,20 +163,19 @@ class Zone:
 class ZoneCard(Zone):
     def __init__(self, id):
         super().__init__(id)
-        self.cards:list[Card] = []
+        self.cards= []
     def size(self):
         return len(self.cards)
-    def add_card(self, card: Card):
-        if isinstance(card, Card):
-            self.cards.append(card)
-            return card
-        else:
-            print("Error: card is not a card")
+    def add_card(self, card):
+        self.cards.append(card)
+        return card
     def remove_card(self, card):
         self.cards.remove(card)
         return card
     def count(self):
         return len(self.cards)
+    
+
 class ZoneCardHand(ZoneCard):
     def __init__(self, id,max_size):
         super().__init__(id)
@@ -226,35 +235,31 @@ class ZoneEffect(Zone):
     def __init__(self, id, effects):
         super().__init__(id)
         self.effects = effects
-    def add_effect(self, effect: Effect):
-        if isinstance(effect, Effect):
-            self.effects.append(effect)
-            return effect
-        else:
-            print("Error: effect is not a effect")
-    def remove_effect(self, effect: Effect):
-        if isinstance(effect, Effect):
-            self.effects.remove(effect)
-            return effect
-        else:
-            print("Error: effect is not a effect")
+    def add_effect(self, effect):
+
+        self.effects.append(effect)
+        return effect
+
+    def remove_effect(self, effect):
+
+        self.effects.remove(effect)
+        return effect
+
     def count(self):
         return len(self.effects) 
 class ZoneEffectOrderable(ZoneEffect):
     def __init__(self, id, effects):
         super().__init__(id, effects)
-    def add_effect(self, effect: Effect):
-        if isinstance(effect, Effect):
-            self.effects.append(effect)
-            return effect
-        else:
-            print("Error: effect is not a effect")
-    def remove_effect(self, effect: Effect):
-        if isinstance(effect, Effect):
-            self.effects.remove(effect)
-            return effect
-        else:
-            print("Error: effect is not a effect")
+    def add_effect(self, effect):
+        
+        self.effects.append(effect)
+        return effect
+
+    def remove_effect(self, effect):
+
+        self.effects.remove(effect)
+        return effect
+
     def reorder_effects(self, order):
         self.effects = [self.effects[i] for i in order]
 class ZoneEvent(Zone):
@@ -285,7 +290,6 @@ class ZoneEventStack(ZoneEvent):
         return self.events[0]
     def get_top(self):
         return self.events.pop()
-
 class ZoneTrash(Zone):
     def __init__(self, id):
         super().__init__(id)
@@ -492,65 +496,14 @@ class GameMaster:
                 self.next_turn()
             loop += 1
 
-cards = {
-    1: CardCreature("chillwind yeti", 4, {}, "1", "", str(uuid.uuid4()), 4, 5),
-    2: CardSpell("innervate", 0, {}, "2", "add 2 mana", str(uuid.uuid4())),
-    3: CardSpell("pot of greed", 0, {}, "3", "draw 2 cards", str(uuid.uuid4())),
-    4: CardSpell("blackjack", 0, {}, "the player who has less than and is closer to 21 cards in their deck draws 2 cards and the other player discards a card", "4", str(uuid.uuid4())),
-    5: CardCreature("brainwormed transgirl", 2, {}, "5", "when brainwormed transgirl enters the battlefield, you discard a card from your hand \n whenever brainwormed transgirl attacks your opponent discards a card", str(uuid.uuid4()), 3, 2)
- }
 
 
-def innervate_effect(gamemaster, event, player):
-    """
-    Adds 2 mana to the player who played the card.
-
-    Parameters:
-    gamemaster (object): An object that holds the state of the game, including the players and their cards.
-    event (object): Not used in this function.
-    args (list): Not used in this function.
-
-    Returns:
-    None: The function does not return a value. Instead, it creates an instance of EventZonesPlayer to represent the event of a player gaining 2 mana.
-    """
-
-    EventMPCard("innervate_event", gamemaster, player.mana, player.mana + 2, player, player, None)
 
 
-cards[2].effects["onPlay"] = EffectCard("innervate", cards[2], lambda gamemaster, event, player: innervate_effect(gamemaster,event,player), None ,None, None)
-
-def pot_of_greed_effect(gamemaster, event,player):
-    """
-    Draws 2 cards for the player who played the card.
-
-    Parameters:
-    gamemaster (object): An object that holds the state of the game, including the players and their cards.
-    event (object): Not used in this function.
-    args (list): Not used in this function.
-
-    Returns:
-    None: The function does not return a value. Instead, it creates an instance of EventZonesPlayer to represent the event of a player drawing 2 cards.
-    """
-
-    EventZonesPlayer("pot_of_greed_event", gamemaster, player.deck.get_top_x(2), player.deck, player.hand, player, player, player)
-
-cards[3].effects["onPlay"] = EffectCard("pot of greed", cards[3], lambda gamemaster, event, args: pot_of_greed_effect(gamemaster,event,args), None , None, None)
-
-# eventblackjack draws 2 cards for player1 and discards 2 random cards from player2 if player2 has less than 2 cards discard all cards
+blackjack = CardSpell("blackjack", 0, {}, "the player who has less than and is closer to 21 cards in their deck draws 2 cards and the other player discards a card", "4", str(uuid.uuid4()))
 
 
 def blackjack_effect(gamemaster, event, player):
-    """
-    Determines the winner of a round based on the "Blackjack" rule, i.e., the player whose total mana cost of cards is closest to 21 without going over.
-
-    Parameters:
-    gamemaster (object): An object that holds the state of the game, including the players and their cards.
-    event (object): Not used in this function.
-    args (list): Not used in this function.
-
-    Returns:
-    None: The function does not return a value. Instead, it creates an instance of EventZonesDoubleCard to represent the event of a player winning a round.
-    """
     player1 = gamemaster.state.player1
     player2 = gamemaster.state.player2
 
@@ -565,7 +518,44 @@ def blackjack_effect(gamemaster, event, player):
     
 
 
-cards[4].effects["onPlay"] = EffectCard("blackjack", cards[4], lambda gamemaster, event, player: blackjack_effect(gamemaster, event, player),None, None,None)
+blackjack.effects["onPlay"] = EffectCard("blackjack", None, lambda gamemaster, event, player: blackjack_effect(gamemaster, event, player),None, None,None)
+
+
+brainwormed_transgirl = CardCreature("brainwormed transgirl", 2, {}, "5", "when brainwormed transgirl enters the battlefield, you discard a card import your hand \n whenever brainwormed transgirl attacks your opponent discards a card", str(uuid.uuid4()), 3, 2)
+
+
+innervate = CardSpell("innervate", 0, {}, "2", "add 2 mana", str(uuid.uuid4()))
+
+
+def innervate_effect(gamemaster, event, player):
+    EventMPCard("innervate_event", gamemaster, player.mana, player.mana + 2, player, player, None)
+
+
+innervate.effects["onPlay"] = EffectCard("innervate", None, lambda gamemaster, event, player: innervate_effect(gamemaster,event,player), None ,None, None)
+
+
+pot_of_greed = CardSpell("pot of greed", 0, {}, "3", "draw 2 cards", str(uuid.uuid4()))
+
+def pot_of_greed_effect(gamemaster, event,player):
+    EventZonesPlayer("pot_of_greed_event", gamemaster, player.deck.get_top_x(2), player.deck, player.hand, player, player, player)
+
+pot_of_greed.effects["onPlay"] = EffectCard("pot of greed", None, lambda gamemaster, event, args: pot_of_greed_effect(gamemaster,event,args), None , None, None)
+
+
+
+
+chillwind_yeti = CardCreature("chillwind yeti", 4, {}, "1", "", str(uuid.uuid4()), 4, 5)
+
+
+
+cards = {
+    1: chillwind_yeti,
+    2: innervate,
+    3: pot_of_greed,
+    4: blackjack,
+    5: brainwormed_transgirl
+    }
+
 
 
 lusiodeck = [cards[random.randint(1,4)] for i in range(60)]

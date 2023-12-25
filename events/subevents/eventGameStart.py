@@ -1,22 +1,10 @@
-from event import Event
-from eventZonePlayer import EventZonePlayer
-from player import Player
-from gameMaster import GameMaster
-
-
-
-
-
-
-
+# from events\event.py import Event
+# from events\subevents\subZone\EventZonesDoubleCard import EventZonesDoubleCard
+# imports
 class EventGameStart(Event):
-    def __init__(self, id, gamemaster:GameMaster, players:list[Player]):
+    def __init__(self, id, gamemaster, players):
         super().__init__(id, gamemaster)
         self.players = players
-    
     def execute(self):
-        for player in self.players:
-            # draw 5 cards
-            [EventZonePlayer(player.id + "_EventGameStart_draw", self.gamemaster, player.deck.get_top(), player.deck, player.hand, player, player) for i in range(5)]
-    
-    
+        self.gamemaster.state.set_player(self.players[1])
+        EventZonesDoubleCard("EventZonesDoubleCard", self.gamemaster, [self.players[0].deck.get_n_top(i) for i in range(5)], [self.players[1].deck.get_n_top(i) for i in range(5)], self.players[0].deck, self.players[0].hand, self.players[1].deck, self.players[1].hand, self.players[0], self.players[0], self.players[1], self.players[1])

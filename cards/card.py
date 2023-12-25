@@ -1,30 +1,19 @@
-# a card is an object that has a cost, name, and functions that are called whenever a action happens
-from effect import Effect
-from gameMaster import GameMaster
-
 class Card:
-    def __init__(self, name:str, cost:int, effects:list[Effect], text:str, id:str, gameid:str) -> None:
+    def __init__(self, name, cost, effects, text, id, gameid):
         self.name = name
         self.cost = cost
         self.effects = effects
         self.text = text
         self.id = id
         self.gameid = gameid
-
-    def execute_effects(self, gamemaster: GameMaster) -> list[Effect]:
+    def execute_effects(self, gamemaster):
         # execute_effects 
-        _effects:list[Effect] = []
+        _effects = []
         for effect in self.effects:
             x = effect.execute(gamemaster)
             _effects.append(x) if x != None else None
         return _effects
-
-
-    
-    def is_creature(self) -> bool:
+    def is_creature(self):
         return False
-    
-    def is_spell(self) -> bool:
+    def is_spell(self):
         return False
-    
-    

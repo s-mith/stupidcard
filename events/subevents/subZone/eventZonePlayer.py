@@ -1,19 +1,6 @@
-from eventZone import EventZone
-from card import Card
-from zone import Zone
-from player import Player
-
-
+#from events\subevents\eventZone.py import EventZone
+#imports
 class EventZonePlayer(EventZone):
-    def __itit__(self, id, gamemaster, moving_card:Card, old_zone:Zone, new_zone:Zone, old_zone_owner:Player, new_zone_owner:Player, effect_player: Player):
-        super().__init__(id, moving_card, old_zone, new_zone, old_zone_owner, new_zone_owner)
-        self.effect_player = effect_player
-
-        
-
-    
-
-
-    
-
-
+    def __init__(self, id, gamemaster, moving_card, old_zone, new_zone, old_zone_owner, new_zone_owner, effect_player):
+        super().__init__(id, gamemaster, moving_card, old_zone, new_zone, old_zone_owner, new_zone_owner)
+        self.owner = effect_player
