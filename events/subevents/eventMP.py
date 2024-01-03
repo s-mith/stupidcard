@@ -1,6 +1,6 @@
 class EventMP(Event):
-    def __init__(self, id, gamemaster, old_mp, new_mp, target_player):
-        super().__init__(id, gamemaster)
+    def __init__(self, id, gamemaster, owner, old_mp, new_mp, target_player):
+        super().__init__(id, gamemaster, owner)
         self.old_mp = old_mp
         self.new_mp = new_mp
         self.target_player = target_player

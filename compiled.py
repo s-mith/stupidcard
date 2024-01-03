@@ -1,15 +1,15 @@
 import uuid
 import random
 class Event:
-    def __init__(self, id, gamemaster):
+    def __init__(self, id, gamemaster, owner):
         self.id = id 
         self.gamemaster = gamemaster
         self.gamemaster.add_event(self)
     def execute(self):
         pass
 class EventZone(Event):
-    def __init__(self, id, gamemaster, moving_card, old_zone, new_zone, old_zone_owner, new_zone_owner):
-        super().__init__(id, gamemaster)
+    def __init__(self, id, gamemaster, owner, moving_card, old_zone, new_zone, old_zone_owner, new_zone_owner):
+        super().__init__(id, gamemaster, owner)
         self.moving_card = moving_card
         self.old_zone = old_zone
         self.new_zone = new_zone
@@ -19,13 +19,13 @@ class EventZone(Event):
         self.new_zone.add_card(self.old_zone.remove_card(self.moving_card))
 
 class EventZonePlayer(EventZone):
-    def __init__(self, id, gamemaster, moving_card, old_zone, new_zone, old_zone_owner, new_zone_owner, effect_player):
-        super().__init__(id, gamemaster, moving_card, old_zone, new_zone, old_zone_owner, new_zone_owner)
+    def __init__(self, id, gamemaster, owner, moving_card, old_zone, new_zone, old_zone_owner, new_zone_owner, effect_player):
+        super().__init__(id, gamemaster, owner, moving_card, old_zone, new_zone, old_zone_owner, new_zone_owner)
         self.owner = effect_player
 
 class EventZonesCard(EventZone):
-    def __init__(self, id, gamemaster, moving_card, old_zone, new_zone, old_zone_owner, new_zone_owner, effect_card, effect_card_owner):
-        super().__init__(id, gamemaster, moving_card, old_zone, new_zone, old_zone_owner, new_zone_owner)
+    def __init__(self, id, gamemaster, owner, moving_card, old_zone, new_zone, old_zone_owner, new_zone_owner, effect_card, effect_card_owner):
+        super().__init__(id, gamemaster, owner, moving_card, old_zone, new_zone, old_zone_owner, new_zone_owner)
         self.effect_card_owner = effect_card_owner
         self.effect_card = effect_card
     def execute(self):
@@ -33,8 +33,8 @@ class EventZonesCard(EventZone):
             self.new_zone.add_card(self.old_zone.remove_card(card))
 
 class EventZonesCard(EventZone):
-    def __init__(self, id, gamemaster, moving_card, old_zone, new_zone, old_zone_owner, new_zone_owner, effect_card, effect_card_owner):
-        super().__init__(id, gamemaster, moving_card, old_zone, new_zone, old_zone_owner, new_zone_owner)
+    def __init__(self, id, gamemaster, owner, moving_card, old_zone, new_zone, old_zone_owner, new_zone_owner, effect_card, effect_card_owner):
+        super().__init__(id, gamemaster, owner, moving_card, old_zone, new_zone, old_zone_owner, new_zone_owner)
         self.effect_card_owner = effect_card_owner
         self.effect_card = effect_card
     def execute(self):
@@ -42,8 +42,8 @@ class EventZonesCard(EventZone):
             self.new_zone.add_card(self.old_zone.remove_card(card))
 
 class EventZonesPlayer(EventZone):
-    def __init__(self, id, gamemaster, moving_card, old_zone, new_zone, old_zone_owner, new_zone_owner, effect_player):
-        super().__init__(id, gamemaster, None, old_zone, new_zone, old_zone_owner, new_zone_owner)
+    def __init__(self, id, gamemaster, owner, moving_card, old_zone, new_zone, old_zone_owner, new_zone_owner, effect_player):
+        super().__init__(id, gamemaster, owner, None, old_zone, new_zone, old_zone_owner, new_zone_owner)
         self.owner = effect_player
         self.moving_card = moving_card
     def execute(self):
@@ -53,7 +53,7 @@ class EventZonesPlayer(EventZone):
         else:
             self.new_zone.add_card(self.old_zone.remove_card(self.moving_card)) 
 class EventZonesDoubleCard():
-    def __init__(self, id, gamemaster, moving_cards1, moving_cards2, old_zone1, new_zone1, old_zone2, new_zone2, old_zone_owner1, new_zone_owner1, old_zone_owner2, new_zone_owner2):
+    def __init__(self, id, gamemaster, owner, moving_cards1, moving_cards2, old_zone1, new_zone1, old_zone2, new_zone2, old_zone_owner1, new_zone_owner1, old_zone_owner2, new_zone_owner2):
         self.id = id
         self.gamemaster = gamemaster
         self.moving_cards1 = moving_cards1
@@ -76,16 +76,16 @@ class EventZonesDoubleCard():
 # from events\subevents\subZone\EventZonesDoubleCard import EventZonesDoubleCard
 # imports
 class EventGameStart(Event):
-    def __init__(self, id, gamemaster, players):
-        super().__init__(id, gamemaster)
+    def __init__(self, id, gamemaster, owner, players):
+        super().__init__(id, gamemaster, owner)
         self.players = players
     def execute(self):
         self.gamemaster.state.set_player(self.players[1])
         EventZonesDoubleCard("EventZonesDoubleCard", self.gamemaster, [self.players[0].deck.get_n_top(i) for i in range(5)], [self.players[1].deck.get_n_top(i) for i in range(5)], self.players[0].deck, self.players[0].hand, self.players[1].deck, self.players[1].hand, self.players[0], self.players[0], self.players[1], self.players[1])
 
 class EventMP(Event):
-    def __init__(self, id, gamemaster, old_mp, new_mp, target_player):
-        super().__init__(id, gamemaster)
+    def __init__(self, id, gamemaster, owner, old_mp, new_mp, target_player):
+        super().__init__(id, gamemaster, owner)
         self.old_mp = old_mp
         self.new_mp = new_mp
         self.target_player = target_player
@@ -93,8 +93,8 @@ class EventMP(Event):
     def execute(self):
         self.target_player.set_mana(self.new_mp)
 class EventMPCard(EventMP):
-    def __init__(self, id, gamemaster, old_mp, new_mp, target_player, effect_card_owner, effect_card):
-        super().__init__(id, gamemaster, old_mp, new_mp, target_player)
+    def __init__(self, id, gamemaster, owner, old_mp, new_mp, target_player, effect_card_owner, effect_card):
+        super().__init__(id, gamemaster, owner, old_mp, new_mp, target_player)
         self.effect_card_owner = effect_card_owner
         self.effect_card = effect_card
 class Effect:
@@ -511,9 +511,9 @@ def blackjack_effect(gamemaster, event, player):
     total_mana_cost2 = sum(card.mana_cost for card in player2.hand)
 
     if total_mana_cost1 <= 21 and (total_mana_cost2 > 21 or total_mana_cost1 > total_mana_cost2):
-        EventZonesDoubleCard("Blackjack_winner="+player1.id, gamemaster, player1.deck.get_n_top(2), player2.hand.get_random(2), player1.deck, player1.hand, player2.hand, player2.graveyard, player1, player1, player2, player2)
+        EventZonesDoubleCard("Blackjack_winner="+player1.id, gamemaster, owner, player1.deck.get_n_top(2), player2.hand.get_random(2), player1.deck, player1.hand, player2.hand, player2.graveyard, player1, player1, player2, player2)
     elif total_mana_cost2 <= 21 and (total_mana_cost1 > 21 or total_mana_cost2 > total_mana_cost1):
-        EventZonesDoubleCard("Blackjack_winner="+player2.id, gamemaster, player2.deck.get_n_top(2), player1.hand.get_random(2), player2.deck, player2.hand, player1.hand, player1.graveyard, player2, player2, player1, player1)
+        EventZonesDoubleCard("Blackjack_winner="+player2.id, gamemaster, owner, player2.deck.get_n_top(2), player1.hand.get_random(2), player2.deck, player2.hand, player1.hand, player1.graveyard, player2, player2, player1, player1)
         
     
 

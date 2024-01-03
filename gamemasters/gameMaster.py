@@ -14,12 +14,18 @@ class GameMaster:
             if card.id == id:
                 return card
         return None
-    def add_event(self, event):
+    def run_all_effects(self, event, stage, player):
+        for card in self.all_cards():
+            card.execute_effects(self, event, stage, player)
+        for effect in self.effects:
+            effect.execute(self, event, stage, player)
+        self.state.run_players_effects(self, self, event, stage, player)
+    def add_event(self, event, owner=None):
+        self.run_all_effects(self, event, "adding_event", owner)
         self.state.add_event(event)
+        self.run_all_effects(self, event, "added_event", owner)
     def get_top_event(self):
         return self.state.get_top_event()
-    def run_all_effects(self, event):
-        self.state.run_all_effects(event)
     def event_priority_control(self, event):
         if hasattr(event, "owner"):
             if event.owner == self.state.player1:
@@ -92,7 +98,9 @@ class GameMaster:
                 action = ""
                 if checkevent != event:
                     continue
+                top = self.state.get_top()
                 self.state.get_top().execute()
+                self.run_all_effects(self, top, "executed_event", top.owner)
             elif self.state.eventlen() == 0:
                 self.priority_control()
                 action = self.interaction_window(self.state.priority) 

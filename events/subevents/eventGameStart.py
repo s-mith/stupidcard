@@ -2,8 +2,8 @@
 # from events\subevents\subZone\EventZonesDoubleCard import EventZonesDoubleCard
 # imports
 class EventGameStart(Event):
-    def __init__(self, id, gamemaster, players):
-        super().__init__(id, gamemaster)
+    def __init__(self, id, gamemaster, owner, players):
+        super().__init__(id, gamemaster, owner)
         self.players = players
     def execute(self):
         self.gamemaster.state.set_player(self.players[1])

@@ -5,8 +5,8 @@ from player import Player
 from typing import Union
 
 class EventStateSetPriority(EventState):
-    def __init__(self, id, gamemaster: GameMaster, state: State, priority_current: Union[Player, None], priority_next: Union[Player, None]):
-        super().__init__(id, gamemaster, state)
+    def __init__(self, id, gamemaster, owner: GameMaster, state: State, priority_current: Union[Player, None], priority_next: Union[Player, None]):
+        super().__init__(id, gamemaster, owner, state)
         self.priority_current = priority_current
         self.priority_next = priority_next
         

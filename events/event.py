@@ -1,7 +1,6 @@
 class Event:
-    def __init__(self, id, gamemaster):
+    def __init__(self, id, gamemaster, owner, owner):
         self.id = id 
-        self.gamemaster = gamemaster
-        self.gamemaster.add_event(self)
+        gamemaster.add_event(self, owner)
     def execute(self):
         pass

@@ -1,6 +1,6 @@
 class CardCreature(Card):
-    def __init__(self, name, cost, effects, text, id, gameid, attack, life):
-        super().__init__(name, cost, effects, text, id, gameid)
+    def __init__(self, name, cost, effects, text, id, gameid, owner, attack, life):
+        super().__init__(name, cost, effects, text, id, gameid, owner)
         self.attack = attack
         self.life = life
     def set_life(self, life):

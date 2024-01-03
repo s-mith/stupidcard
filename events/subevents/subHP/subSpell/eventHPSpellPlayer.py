@@ -3,7 +3,7 @@ from player import Player
 from cardSpell import CardSpell
 
 class EventHPSpellPlayer(EventHPSpell):
-    def __init__(self, id, gamemaster, old_hp: int, new_hp: int, effect_spell_owner: Player, effect_spell: CardSpell, target_player: Player):
+    def __init__(self, id, gamemaster, owner, old_hp: int, new_hp: int, effect_spell_owner: Player, effect_spell: CardSpell, target_player: Player):
         super().__init__(id, old_hp, new_hp, effect_spell_owner, effect_spell)
         self.target_player = target_player
         

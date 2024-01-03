@@ -1,11 +1,12 @@
 class Card:
-    def __init__(self, name, cost, effects, text, id, gameid):
+    def __init__(self, name, cost, effects, text, id, gameid, owner):
         self.name = name
         self.cost = cost
         self.effects = effects
         self.text = text
         self.id = id
         self.gameid = gameid
+        self.owner = owner
     def execute_effects(self, gamemaster):
         # execute_effects 
         _effects = []
@@ -17,3 +18,5 @@ class Card:
         return False
     def is_spell(self):
         return False
+    def set_owner(self, owner):
+        self.owner = owner

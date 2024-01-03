@@ -3,8 +3,8 @@ from gameMaster import GameMaster
 from state import State
 
 class EventStateSetTurn(EventState):
-    def __init__(self, id, gamemaster: GameMaster, state: State,turn_current:int, turn_next:int):
-        super().__init__(id, gamemaster, state)
+    def __init__(self, id, gamemaster, owner: GameMaster, state: State,turn_current:int, turn_next:int):
+        super().__init__(id, gamemaster, owner, state)
         self.turn_current = turn_current
         self.turn_next = turn_next
         

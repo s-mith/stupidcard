@@ -21,6 +21,7 @@
         "./permanences",
         "./states",
         "./gamemasters",
-        "./cardlist"
+        "./cardlist",
+        "./effectlist"
     ]
 }

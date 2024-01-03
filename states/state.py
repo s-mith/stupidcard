@@ -5,6 +5,7 @@ class State:
     def __init__(self, player1, player2):
         self.player1 = player1
         self.player2 = player2
+        self.players = [player1, player2]
         self.stack = ZoneEventStack("stack", [])
         self.trash = ZoneTrash("trash")
         self.turn = 0
@@ -38,6 +39,7 @@ class State:
         return self.stack.get_top()
     def eventlen(self):
         return self.stack.count()
-    def run_all_effects(self, event):
-        self.player1.check_all_effects(event)
-        self.player2.check_all_effects(event)
+    def run_players_effects(self, gamemaster, event, stage, player):
+        for player in self.players:
+            player.execute_effects(self,gamemaster, event, stage, player)
+        

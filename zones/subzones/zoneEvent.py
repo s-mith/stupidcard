@@ -1,3 +1,5 @@
+from zone import Zone
+#imports
 class ZoneEvent(Zone):
     def __init__(self, id, events):
         super().__init__(id)
