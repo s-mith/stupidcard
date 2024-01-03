@@ -8,3 +8,4 @@
 - [ ] scratch card implementation
 - [ ] events should be executed in groups
 - [ ] in the group theres several events that get executed at the same time 
+- [ ] create targeted effects
